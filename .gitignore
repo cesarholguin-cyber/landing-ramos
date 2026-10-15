@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.DS_Store
+*.tar.gz
+Cedulas/
+.env
+.env.*
+!.env.example
+*.pem
+*.key

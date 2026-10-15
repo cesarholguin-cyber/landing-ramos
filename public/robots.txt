@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ramos-asociados-despacho.cesarholguin.chatgpt.site/sitemap.xml
