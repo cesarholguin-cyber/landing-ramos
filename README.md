@@ -28,7 +28,7 @@ curl -I http://127.0.0.1:8080/
 curl -I -H 'Range: bytes=0-1023' http://127.0.0.1:8080/public/assets/despacho-2k.mp4
 ```
 
-Revisar el contacto, reproducción del video, imágenes y títulos desde el dominio definitivo; comprobar canonical y sitemap. El video debe admitir solicitudes parciales (HTTP 206). Los archivos inexistentes responden 404; las secciones de la landing usan anclas (`#contacto`, `#ubicaciones`).
+Revisar el contacto, reproducción del video, imágenes y fichas de cédulas desde el dominio definitivo; comprobar canonical y sitemap. El video debe admitir solicitudes parciales (HTTP 206). Los archivos inexistentes responden 404; las secciones de la landing usan anclas (`#contacto`, `#ubicaciones`).
 
 ## Desarrollo y pruebas
 
@@ -46,7 +46,7 @@ La configuración `.openai/hosting.json` conserva la identidad del sitio previo 
 ## Privacidad y pendientes
 
 - No incluir tokens, archivos `.env`, PDFs originales de cédulas ni documentos de trabajo internos. `.dockerignore` restringe los archivos enviados a Docker.
-- Las imágenes de los dos títulos ya publicadas se conservan. Las cédulas siguen como fichas de texto; no se restauran sus escaneos.
+- La sección muestra solamente fichas de cédulas con nombres y números, sin escaneos. Los títulos y sus imágenes se retiraron de la versión actual; esto no elimina las imágenes del historial de Git.
 - Horarios y áreas de práctica continúan pendientes de aprobación. Analytics sigue desactivado.
 - El correo público no concede acceso a una cuenta de Google.
 - No se garantiza indexación ni posiciones en buscadores. Completar la configuración del dominio y Search Console con el cliente.
