@@ -47,7 +47,9 @@ La configuración `.openai/hosting.json` conserva la identidad del sitio previo 
 
 - No incluir tokens, archivos `.env`, PDFs originales de cédulas ni documentos de trabajo internos. `.dockerignore` restringe los archivos enviados a Docker.
 - La sección muestra solamente fichas de cédulas con nombres y números, sin escaneos. Los títulos y sus imágenes se retiraron de la versión actual; esto no elimina las imágenes del historial de Git.
-- Horarios y áreas de práctica continúan pendientes de aprobación. Analytics sigue desactivado.
+- Horarios y áreas de práctica continúan pendientes de aprobación.
+- Google Analytics 4 (`G-M7SWYXSLL0`) carga directamente desde `src/document.html`, por solicitud del propietario del 2026-10-16. No hay banner ni bloqueo previo de consentimiento. El aviso de privacidad sigue pendiente de aprobación; esta implementación no certifica cumplimiento normativo.
+- La configuración inicial de Analytics omite parámetros/anclas de la URL y el referente, y desactiva Google Signals y personalización publicitaria. La medición mejorada de la propiedad puede recopilar otros eventos y debe revisarse en Google Analytics. Verificar recepción en Tiempo real después del despliegue; las pruebas locales no acreditan recepción en la propiedad.
 - El correo público no concede acceso a una cuenta de Google.
 - No se garantiza indexación ni posiciones en buscadores. Completar la configuración del dominio y Search Console con el cliente.
 

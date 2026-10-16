@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { build } from 'esbuild';
 import { createRequire } from 'node:module';
 import { businessProfile, confirmedDetails, addConfirmedBusinessSchema } from '../src/business-profile.mjs';
-import { startAnalytics } from '../src/analytics.mjs';
+import { runInNewContext } from 'node:vm';
 
 const schema = { '@graph': [{ '@type': ['LegalService', 'Organization'], name: 'Ramos & Asociados' }] };
 // Datos ficticios exclusivos de pruebas; nunca se importan en la aplicación.
@@ -41,25 +41,31 @@ test('approved components are present in initial HTML; defaults render nothing',
   assert.match(html, /09:00/);
   assert.match(html, /Área de prueba/);
 });
-test('current public build contains no draft details or analytics requests', async () => {
+test('current public build contains no draft business details', async () => {
   const html = await readFile('index.html', 'utf8');
-  const js = await readFile('public/site.js', 'utf8');
   assert.doesNotMatch(html, /openingHoursSpecification|Área de prueba|HORARIO DE ATENCIÓN|POR CONFIRMAR/);
-  assert.doesNotMatch(html + js, /googletagmanager\.com|google-analytics\.com/);
 });
-test('analytics adapter requires activation, consent and valid ID; initializes only once', () => {
-  const scripts = [];
-  const doc = { getElementById: id => scripts.find(s => s.id === id), createElement: () => ({}), head: { appendChild: s => scripts.push(s) } };
-  const win = { location: { origin: 'https://example.test', pathname: '/', search: '?private=value', hash: '#private' } };
-  assert.equal(startAnalytics({ win, doc, consent: true }), false);
-  const config = { enabled: true, measurementId: 'G-TEST123' };
-  assert.equal(startAnalytics({ config, win, doc }), false);
-  assert.equal(scripts.length, 0);
-  assert.throws(() => startAnalytics({ config: { enabled: true }, consent: true, win, doc }));
-  assert.equal(startAnalytics({ config, consent: true, win, doc }), true);
-  assert.equal(startAnalytics({ config, consent: true, win, doc }), true);
-  assert.equal(scripts.length, 1);
-  const settings = Array.from(win.dataLayer[1])[2];
-  assert.equal(settings.page_location, 'https://example.test/');
-  assert.equal(settings.page_referrer, '');
+test('published HTML initializes exactly one GA4 tag without a consent gate', async () => {
+  const js = await readFile('public/site.js', 'utf8');
+  assert.doesNotMatch(js, /googletagmanager\.com|G-M7SWYXSLL0/);
+  for (const file of ['src/document.html', 'index.html', 'dist/client/index.html']) {
+    const html = await readFile(file, 'utf8');
+    const head = html.match(/<head>([\s\S]*?)<\/head>/)[1];
+    assert.equal((html.match(/src="https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=G-M7SWYXSLL0"/g) || []).length, 1);
+    assert.doesNotMatch(html + js, /G-RYM6J65LP2/);
+    const inline = [...head.matchAll(/<script>([\s\S]*?)<\/script>/g)].find(([, code]) => code.includes("gtag('config'"))[1];
+    const sandbox = { location: { origin: 'https://example.test', pathname: '/', search: '?private=value', hash: '#private' } };
+    sandbox.window = sandbox;
+    runInNewContext(inline, sandbox);
+    const commands = sandbox.dataLayer.map(args => Array.from(args));
+    assert.equal(commands.length, 2);
+    assert.equal(commands[0][0], 'js');
+    assert.equal(commands[1][0], 'config');
+    assert.equal(commands[1][1], 'G-M7SWYXSLL0');
+    assert.equal(commands[1][2].page_location, 'https://example.test/');
+    assert.equal(commands[1][2].page_referrer, '');
+    assert.equal(commands[1][2].allow_google_signals, false);
+    assert.equal(commands[1][2].allow_ad_personalization_signals, false);
+    assert.notEqual(commands[1][2].send_page_view, false);
+  }
 });
