@@ -3,6 +3,7 @@ import { VideoHero } from "./VideoHero.jsx";
 import { Credentials } from "./Credentials.jsx";
 import { Locations } from "./Locations.jsx";
 import { PracticeAreas } from "./BusinessDetails.jsx";
+import { WhatsAppContact } from "./WhatsAppContact.jsx";
 
 const whatsapp = "https://wa.me/526622123568?text=Buen%20d%C3%ADa.%20Me%20gustar%C3%ADa%20conversar%20sobre%20un%20asunto%20con%20Ramos%20%26%20Asociados.";
 const logo = "./public/assets/logo-ramos.png";
@@ -48,5 +49,6 @@ export function App() {
       <section className="contact section" id="contacto" aria-labelledby="contact-title"><div className="section-top"><p className="eyebrow">06 / INICIEMOS UNA CONVERSACIÓN</p><span className="edition">HERMOSILLO, SONORA, MÉXICO</span></div><div className="contact-heading reveal entered"><h2 id="contact-title">Hablemos de<br /><em>su siguiente paso.</em></h2><a className="contact-arrow" href={whatsapp} target="_blank" rel="noreferrer" aria-label="Iniciar conversación por WhatsApp"><span>↗</span></a></div><div className="contact-row"><p>Cuéntenos qué necesita resolver.</p><a className="underlined-link" href={whatsapp} target="_blank" rel="noreferrer">Contactar por WhatsApp <span>↗</span></a></div><address className="contact-info"><div><p className="eyebrow">TELÉFONO</p><a href="tel:+526622123568">662 212 3568</a></div><div><p className="eyebrow">CORREO ELECTRÓNICO</p><a href="mailto:ramosyasociadoslegal@gmail.com">ramosyasociadoslegal@gmail.com</a></div><div><p className="eyebrow">LA FIRMA</p><p>Ramos & Asociados<br />Hermosillo, Sonora, México</p></div></address></section>
     </main>
     <footer className="footer"><div className="footer-main"><a className="footer-brand" href="#inicio"><img src={logo} alt="Ramos & Asociados" /></a><p>Estrategia<br /><em>con fundamento.</em></p><a className="back-top" href="#inicio">Volver al inicio <span>↑</span></a></div><Credentials /><div className="footer-bottom"><span>© 2026 Ramos & Asociados</span><span>CRITERIO. DISCRECIÓN. CLARIDAD.</span></div></footer>
+    <WhatsAppContact />
   </>;
 }

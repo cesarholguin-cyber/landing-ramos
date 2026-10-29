@@ -17,7 +17,7 @@ const module = {exports:{}};
 new Function('require','module','exports',ssr.outputFiles[0].text)(require,module,module.exports);
 const markup = module.exports.html;
 const browser = await build({entryPoints:['src/main.jsx'],bundle:true,write:false,platform:'browser',format:'iife',jsx:'automatic',minify:true,define:{'process.env.NODE_ENV':'"production"'},plugins:[{name:'inline-css-separately',setup(b){b.onLoad({filter:/\.css$/},()=>({contents:'',loader:'js'}));}}]});
-const css = (await Promise.all(['styles','identity','cinema','video','credentials','locations'].map(name=>readFile(`src/${name}.css`,'utf8')))).join('\n').replaceAll("url('assets/", "url('./public/assets/").replace(/@font-face\{[^}]*jost-semibold[^}]*\}/g,'');
+const css = (await Promise.all(['styles','identity','cinema','video','credentials','locations','whatsapp'].map(name=>readFile(`src/${name}.css`,'utf8')))).join('\n').replaceAll("url('assets/", "url('./public/assets/").replace(/@font-face\{[^}]*jost-semibold[^}]*\}/g,'');
 await writeFile('public/site.js', browser.outputFiles[0].text);
 let html = (await readFile('src/document.html','utf8')).replace('<html lang="en">','<html lang="es-MX">').replace(/\s*<noscript>[\s\S]*?<\/noscript>/,'').replace('<div id="root"></div>', () => `<div id="root">${markup}</div>`).replace('<script type="module" src="/src/main.jsx"></script>', '<script defer src="./public/site.js"></script>').replace('</head>',() => `<style>${css}</style>\n</head>`).replaceAll('content="/assets/', 'content="./public/assets/');
 // Visible content and search metadata use the same approved business details.
